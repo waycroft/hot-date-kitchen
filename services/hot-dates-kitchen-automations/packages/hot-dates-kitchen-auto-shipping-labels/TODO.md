@@ -1,5 +1,7 @@
 # TODO
 
+- [ ] Buy response: "phoneNumber: none is not an allowed value" returned from Easypost, supposedly because phone was not provided by customer at Shopify checkout?
+
 ## Deployment
 - [ ] Observability/logging
 	- [ ] Ensure customer data is excluded from Sentry and also application logs
