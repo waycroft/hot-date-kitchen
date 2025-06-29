@@ -218,7 +218,7 @@ const server = Bun.serve({
 
 if (server) {
 	logger.info(`Bun server running on port ${server.port}`)
-	logger.info(`environment: ${env}`)
+	logger.info(`Environment: ${env}`)
 	if (Sentry.getClient() && Sentry.isEnabled()) logger.info('Sentry client established.')
 	logger.info(`Shopify API base URL: ${Bun.env.SHOPIFY_API_BASE_URL_GQL}`)
 	logger.info(`SEND_LIVE_EMAILS set to: ${Bun.env.SEND_LIVE_EMAILS}`)
