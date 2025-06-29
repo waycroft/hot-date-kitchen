@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+	"build": "bun build --entrypoints src/index.js --outdir dist --target=bun",
     "runtime": "bun --version",
     "dev": "bun --watch run src/index.js",
     "format": "prettier --write ."
