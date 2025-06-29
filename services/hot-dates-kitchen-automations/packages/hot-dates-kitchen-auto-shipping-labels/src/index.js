@@ -3,13 +3,15 @@ import { ShopifyClient } from 'shopify'
 import { EasyPostClient } from 'easypost'
 import { EmailClient } from 'email'
 import { Order, Fulfillment } from './gql'
-import rules from './rules'
+import rules, { NoSuitableRatesError } from './rules'
 import { createPackingSlipPdfs } from '../packing-slip/packing-slip-generator'
 import constants from './constants'
 import { DateTime } from 'luxon'
 import shopifyCarriers from './carrier-mapping.json'
 import logger from '../utils/logger.js'
 import { redactPII } from "../utils/redactPII.js";
+import retry from "../utils/retry.js";
+import { extractNumberFromShopifyGuid } from "../utils/utils.js";
 import { validateShopifyWebhookHmac } from "../utils/webhook-validation.js";
 
 const env = Bun.env.NODE_ENV
@@ -96,15 +98,57 @@ async function purchaseShippingLabelsHandler(reqBody) {
 		}
 		//logger.debug('Shipment:\n' + JSON.stringify(shipment, null, 2));
 
-		// Create shipment
-		const shipmentResponse = await easypost.createShipment(shipment)
-		//logger.debug('Shipment response:\n' + JSON.stringify(shipmentResponse, null, 2));
+		// The "rates" list returned by "create shipment" can sometimes return different results between calls, and some results might pass rules, while others don't. So we implement a gentle retry to see if we get a better roll of the die.
+		// TODO: Are there repercussions for creating multiple shipments? I'm assuming the only real repercussion is *purchasing* a shipment...but worth looking into.
+		let chosenRateId
+		let shipmentResponse
+		try {
+			chosenRateId = await retry(async function() {
+				// Create shipment
+				shipmentResponse = await easypost.createShipment(shipment)
+				logger.debug('Shipment response:\n' + JSON.stringify(shipmentResponse, null, 2));
 
-		// Choose a rate
-		const rateId = await rules(fulfillmentOrder, shipmentResponse)
+				if (!shipmentResponse.rates) {
+					throw new Error('Shipment response from Easypost returned no rates')
+				}
+
+				// Choose a rate
+				return await rules(shipmentResponse)
+		}, [NoSuitableRatesError], { maxRetries: 3, retryInterval: 30000 }) // Wait a while to see if new rates available (an immediate retry seems to return the same options, but waiting a while seems to do better)
+		} catch(e) {
+			// Email shop owner about no suitable rate found
+			const shopifyOrderUrl = `${Bun.env.SHOPIFY_ADMIN_BASE_URL}/orders/${extractNumberFromShopifyGuid(order.id)}`
+			const emailMessage = {
+				from: Bun.env.FULFILLMENTS_FROM_EMAIL,
+				to: env === "production" ? Bun.env.SHOP_OWNER_EMAIL : Bun.env.TEST_TO_EMAIL,
+				subject: `Order ${order.name} - No suitable shipping rate found`,
+				body: {
+					text: `Order: ${order.name}
+Available rates that were rejected:
+${shipmentResponse?.rates ? shipmentResponse.rates.map(rate =>
+	`${rate.carrier} ${rate.service}: $${rate.rate} (${rate.delivery_days} days)`
+).join('\n') : 'No rates available'}
+
+View order in Shopify Admin: ${shopifyOrderUrl}
+
+Error: ${e.message}`
+				}
+			}
+
+			if (Bun.env.SEND_LIVE_EMAILS === "true") {
+				await mailClient.sendMail(emailMessage)
+				logger.info(`Sent no suitable rate email for order ${order.name}`)
+			} else {
+				logger.debug("Would have sent no suitable rate email:")
+				logger.debug(JSON.stringify(emailMessage, null, 2))
+			}
+
+			// Re-throw the error to maintain the existing error handling flow
+			throw e
+		}
 
 		// Buy the rate
-		const buyResponse = await easypost.buyShipment(shipmentResponse.id, rateId)
+		const buyResponse = await easypost.buyShipment(shipmentResponse.id, chosenRateId)
 		logger.debug('Buy response:\n' + JSON.stringify(redactPII(buyResponse), null, 2))
 
 		// Create Shopify Fulfillment, which closes a FulfillmentOrder
@@ -226,6 +270,7 @@ const server = Bun.serve({
 
 				// Parse JSON body after validation
 				const body = JSON.parse(bodyBuffer.toString('utf8'))
+
 				// For debugging
 				//await Bun.write('sample-payload-2.json', JSON.stringify(body, null, 2))
 				purchaseShippingLabelsHandler(body).catch(e => {
