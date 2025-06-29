@@ -16,7 +16,6 @@ export default class Logger {
 			default:
 				break
 		}
-      console.log(this.#level)
 	}
 
 	error = function(...msgs) {

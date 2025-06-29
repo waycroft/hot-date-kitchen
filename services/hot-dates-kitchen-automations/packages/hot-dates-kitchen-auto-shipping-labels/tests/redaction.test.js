@@ -14,6 +14,7 @@ test('containsPII returns true if obj has PII', () => {
 test('redactFulfillmentOrder redacts sensitive data', () => {
   const fulfillmentOrder = mockFulfillmentOrder;
   const redactedFulfillmentOrder = redactPII(fulfillmentOrder);
+  //console.debug(JSON.stringify(redactedFulfillmentOrder, null, 2))
   expect(containsPII(redactedFulfillmentOrder)).toBe(false);
   // sanity checks
   expect(redactedFulfillmentOrder.destination.address1).toBe('[REDACTED]')
@@ -24,6 +25,7 @@ test('redactFulfillmentOrder redacts sensitive data', () => {
 test('redactOrder redacts sensitive data', () => {
   const order = mockOrder;
   const redactedOrder = redactPII(order);
+  //console.debug(JSON.stringify(redactedOrder, null, 2))
   expect(containsPII(redactedOrder)).toBe(false);
   // sanity checks
   expect(redactedOrder.email).toBe('[REDACTED]')
