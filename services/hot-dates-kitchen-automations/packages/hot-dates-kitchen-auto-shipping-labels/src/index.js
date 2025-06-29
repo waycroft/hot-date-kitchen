@@ -229,7 +229,9 @@ const server = Bun.serve({
 				//await Bun.write('sample-payload-2.json', JSON.stringify(body, null, 2))
 				purchaseShippingLabelsHandler(body).catch(e => {
 					logger.error(e)
-					Sentry.captureException(error)
+					if (env === "production") {
+						Sentry.captureException(e)
+					}
 				})
 				return new Response('ok')
 			},
