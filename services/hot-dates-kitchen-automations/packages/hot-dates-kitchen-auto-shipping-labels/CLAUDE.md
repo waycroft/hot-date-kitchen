@@ -43,3 +43,6 @@ This is a Shopify webhook automation service that purchases shipping labels thro
 ### Data Flow
 - Webhook payload → Order fetch → Fulfillment orders → EasyPost shipments → Rate selection → Label purchase → Shopify fulfillment creation → Packing slip generation → Email notification
 
+## Testing Guidelines
+
+- When writing tests, try to avoid using a `describe` block and just use `test`s, unless there will be more than one `describe`
