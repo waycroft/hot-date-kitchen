@@ -204,8 +204,12 @@ const server = Bun.serve({
 		'/hooks/purchase-shipping-labels': {
 			POST: async (req) => {
 				const body = await req.json()
-				await Bun.write('sample-payload-2.json', JSON.stringify(body, null, 2))
-				purchaseShippingLabelsHandler(body)
+				// For debugging
+				//await Bun.write('sample-payload-2.json', JSON.stringify(body, null, 2))
+				purchaseShippingLabelsHandler(body).catch(e => {
+					logger.error(e)
+					Sentry.captureException(error)
+				})
 				return new Response('ok')
 			},
 		},
