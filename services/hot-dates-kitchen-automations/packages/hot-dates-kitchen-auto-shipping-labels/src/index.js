@@ -9,6 +9,7 @@ import constants from './constants'
 import { DateTime } from 'luxon'
 import shopifyCarriers from './carrier-mapping.json'
 import logger from '../utils/logger.js'
+import { redactPII } from "../utils/redactPII.js";
 
 const env = Bun.env.NODE_ENV
 
@@ -36,7 +37,7 @@ async function purchaseShippingLabelsHandler(reqBody) {
 
 	// Get order by id
 	const order = (await shopify.gqlQuery(Order.byId, { id: orderId })).data.order
-	logger.debug('order: ', JSON.stringify(order, null, 2));
+	logger.debug('order: ', JSON.stringify(redactPII(order), null, 2));
 
 	// We'll be generating shipping labels for each fulfillment order, so we'll loop through each fulfillment order and generate a shipping label for each
 	// Some info about Shopify fulfillment:
@@ -52,7 +53,7 @@ async function purchaseShippingLabelsHandler(reqBody) {
 				continue
 			}
 		} else {
-			logger.debug(JSON.stringify(fulfillmentOrder, null, 2));
+			logger.debug(JSON.stringify(redactPII(fulfillmentOrder), null, 2));
 		}
 
 		const shipment = {
@@ -103,7 +104,7 @@ async function purchaseShippingLabelsHandler(reqBody) {
 
 		// Buy the rate
 		const buyResponse = await easypost.buyShipment(shipmentResponse.id, rateId)
-		logger.debug('Buy response:\n' + JSON.stringify(buyResponse, null, 2))
+		logger.debug('Buy response:\n' + JSON.stringify(redactPII(buyResponse), null, 2))
 
 		// Create Shopify Fulfillment, which closes a FulfillmentOrder
 		// https://shopify.dev/docs/apps/build/orders-fulfillment/order-management-apps/build-fulfillment-solutions
@@ -136,7 +137,7 @@ async function purchaseShippingLabelsHandler(reqBody) {
 				await shopify.gqlQuery(Fulfillment.create, { fulfillment: fulfillment })
 			} else {
 				logger.debug(`Would have created Fulfillment for FulfillmentOrder ${fulfillmentOrder.id}:`)
-				logger.debug(JSON.stringify(fulfillment, null, 2))
+				logger.debug(JSON.stringify(redactPII(fulfillment), null, 2))
 			}
 		}
 

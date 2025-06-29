@@ -1,4 +1,4 @@
-const mockOrder = {
+const mockFulfillmentOrder = {
   id: '123',
   assignedLocation: {
     address1: '123 Road Street',
@@ -51,6 +51,4 @@ const mockOrder = {
   }
 }
 
-export {
-  mockOrder
-};
+export default mockFulfillmentOrder;
