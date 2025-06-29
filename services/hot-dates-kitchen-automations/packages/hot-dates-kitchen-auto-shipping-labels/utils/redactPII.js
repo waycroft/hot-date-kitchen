@@ -29,11 +29,11 @@ const redactPII = (obj) => {
       const key = k.toLowerCase();
       if (redactKeySet.has(key)) {
         out[k] = '[REDACTED]';
-      } 
+      }
       // redacts all shopify custom properties
       else if (k === 'custom_attributes' && Array.isArray(v)) {
         out[k] = v.map(a => (
-          { 
+          {
             ...a,
             value: '[REDACTED]'
           }
