@@ -13,6 +13,7 @@ const REDACT_KEYS = [
   'lastName',
   'email',
   'address1',
+  'street1',
   'address2',
   'zip',
   'phone'
