@@ -3,8 +3,6 @@
 - [ ] Buy response: "phoneNumber: none is not an allowed value" returned from Easypost, supposedly because phone was not provided by customer at Shopify checkout?
 
 ## Deployment
-- [ ] Observability/logging
-	- [ ] Ensure customer data is excluded from Sentry and also application logs
 - [ ] Pre-flight: [Shopify webhooks best practices](https://shopify.dev/docs/apps/build/webhooks/best-practices)
 - [ ] Deploy to EC2
 
