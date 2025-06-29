@@ -203,7 +203,28 @@ const server = Bun.serve({
 		'/favicon.ico': new Response('Not found', { status: 404 }),
 		'/hooks/purchase-shipping-labels': {
 			POST: async (req) => {
-				const body = await req.json()
+				// Get raw body for HMAC validation
+				const rawBody = await req.arrayBuffer()
+				const bodyBuffer = Buffer.from(rawBody)
+
+				// Validate Shopify webhook HMAC
+				if (env === 'production') {
+					const hmacHeader = req.headers.get('X-Shopify-Hmac-SHA256')
+
+					if (!hmacHeader) {
+						return new Response('Unauthorized', { status: 401 })
+					}
+
+					const webhookSecret = Bun.env.SHOPIFY_WEBHOOK_SECRET
+
+					if (!validateShopifyWebhookHmac(hmacHeader, bodyBuffer, webhookSecret)) {
+						logger.warn('Shopify webhook authentication failed')
+						return new Response('Unauthorized', { status: 401 })
+					}
+				}
+
+				// Parse JSON body after validation
+				const body = JSON.parse(bodyBuffer.toString('utf8'))
 				// For debugging
 				//await Bun.write('sample-payload-2.json', JSON.stringify(body, null, 2))
 				purchaseShippingLabelsHandler(body).catch(e => {
