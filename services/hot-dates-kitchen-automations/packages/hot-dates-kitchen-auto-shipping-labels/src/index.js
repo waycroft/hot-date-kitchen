@@ -53,6 +53,8 @@ async function purchaseShippingLabelsHandler(reqBody) {
 	for (const fulfillmentOrder of fulfillmentOrders) {
 		if (env === "production") {
 			if (fulfillmentOrder.status === "CLOSED") {
+				// Protects against duplicate webhooks (although the real way is to use the shopify header and a persistence layer)
+				logger.debug("fulfillmentOrder already CLOSED, skipping")
 				continue
 			}
 		} else {
