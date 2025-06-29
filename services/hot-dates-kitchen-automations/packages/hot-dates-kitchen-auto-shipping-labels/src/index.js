@@ -10,6 +10,7 @@ import { DateTime } from 'luxon'
 import shopifyCarriers from './carrier-mapping.json'
 import logger from '../utils/logger.js'
 import { redactPII } from "../utils/redactPII.js";
+import { validateShopifyWebhookHmac } from "../utils/webhook-validation.js";
 
 const env = Bun.env.NODE_ENV
 
