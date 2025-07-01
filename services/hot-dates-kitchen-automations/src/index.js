@@ -116,7 +116,7 @@ async function purchaseShippingLabelsHandler(reqBody) {
 
 				// Choose a rate
 				return await rules(shipmentResponse)
-		}, [NoSuitableRatesError], { maxRetries: 3, retryInterval: 30000 }) // Wait a while to see if new rates available (an immediate retry seems to return the same options, but waiting a while seems to do better)
+		}, [NoSuitableRatesError], { maxRetries: Bun.env.SHIPPING_RATE_SEARCH_RETRIES, retryInterval: Bun.env.SHIPPING_RATE_SEARCH_RETRY_INTERVAL, backoff: false }) // Wait a while to see if new rates available (an immediate retry seems to return the same options, but waiting a while seems to do better)
 		} catch(e) {
 			// Email shop owner about no suitable rate found
 			const shopifyOrderUrl = `${Bun.env.SHOPIFY_ADMIN_BASE_URL}/orders/${extractNumberFromShopifyGuid(order.id)}`
