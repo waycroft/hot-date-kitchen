@@ -257,12 +257,11 @@ const server = Bun.serve({
 				// Validate Shopify webhook HMAC
 				if (env === 'production') {
 					const hmacHeader = req.headers.get('X-Shopify-Hmac-SHA256')
+					const webhookSecret = Bun.env.SHOPIFY_WEBHOOK_SECRET
 
 					if (!hmacHeader) {
 						return new Response('Unauthorized', { status: 401 })
 					}
-
-					const webhookSecret = Bun.env.SHOPIFY_WEBHOOK_SECRET
 
 					if (!validateShopifyWebhookHmac(hmacHeader, bodyBuffer, webhookSecret)) {
 						logger.warn('Shopify webhook authentication failed')
