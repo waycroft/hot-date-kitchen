@@ -1,5 +1,5 @@
-import { test, expect, describe } from 'bun:test'
-import retry from '../utils/retry.js'
+import { test, expect } from 'bun:test'
+import retry from '../src/utils/retry'
 
 // Test error classes
 class NetworkError extends Error {

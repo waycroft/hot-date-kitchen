@@ -4,7 +4,7 @@ import mockOrder from './mock-data/order';
 import {
   containsPII,
   redactPII,
-} from '../utils/redactPII';
+} from '../src/utils/redactPII';
 
 test('containsPII returns true if obj has PII', () => {
   const unredactedFulfillmentOrder = mockFulfillmentOrder;
