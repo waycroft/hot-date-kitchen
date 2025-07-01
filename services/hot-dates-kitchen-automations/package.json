@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "puppeteer-browser-install": "puppeteer browsers install chrome",
-    "build": "bun install && bun build.js",
+    "build": "bun build.js",
     "runtime": "bun --version",
     "dev": "bun --watch run src/index.js",
     "format": "prettier --write ."
