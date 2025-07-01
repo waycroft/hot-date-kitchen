@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-	"build": "bun build --entrypoints src/index.js --outdir dist --target=bun",
+    "puppeteer-browser-install": "puppeteer browsers install chrome",
+    "build": "bun install && bun build.js",
     "runtime": "bun --version",
     "dev": "bun --watch run src/index.js",
     "format": "prettier --write ."
