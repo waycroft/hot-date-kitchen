@@ -1,9 +1,9 @@
-import logger from '../utils/logger'
+import logger from '../../utils/logger'
 import puppeteer from 'puppeteer';
-import { validateFulfillmentOrder } from '../utils/validation';
+import { validateFulfillmentOrder } from '../../utils/validation';
 import { htmlTemplate } from './packing-slip-template';
 import { DateTime } from 'luxon';
-import { getDefaultVariantDisplayName } from '../utils/utils';
+import { getDefaultVariantDisplayName } from '../../utils/utils';
 
 const getName = (fulfillmentOrder) => `${fulfillmentOrder.destination.firstName} ${fulfillmentOrder.destination.lastName}`;
 

@@ -1,4 +1,4 @@
-import { mockOrder } from './mock-data';
+import { mockOrder } from '../../tests/mock-data/order';
 import { createPackingSlipPdfs } from './packing-slip-generator';
 
 const pdf = (await createPackingSlipPdfs([mockOrder], true)).pdfs[0];

@@ -1,6 +1,6 @@
 await Bun.build({
   entrypoints: ['./src/index.js'],
-  outdir: './dist',
+  outdir: '../../dist',
   target: 'bun',
   external: ['puppeteer']
 });

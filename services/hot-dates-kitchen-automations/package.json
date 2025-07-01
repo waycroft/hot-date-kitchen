@@ -1,7 +1,26 @@
 {
-    "name": "hot-dates-kitchen-automations",
-    "private": true,
-    "workspaces": [
-        "packages/*"
-    ]
+  "name": "hot-dates-kitchen-automations",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "common/*"
+  ],
+  "scripts": {
+    "puppeteer-browser-install": "puppeteer browsers install chrome",
+    "build": "bun install && bun build.js",
+    "runtime": "bun --version",
+    "dev": "bun --watch run src/index.js",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "@sentry/bun": "^9.27.0",
+    "easypost": "workspace:*",
+    "jsonata": "^2.0.6",
+    "luxon": "^3.6.1",
+    "puppeteer": "^24.11.1",
+    "shopify": "workspace:*"
+  }
 }
