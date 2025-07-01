@@ -1,18 +1,18 @@
 import * as Sentry from "@sentry/bun";
-import { ShopifyClient } from '../common/shopify'
-import { EasyPostClient } from '../common/easypost'
-import { EmailClient } from '../common/email'
+import { ShopifyClient } from './common/shopify'
+import { EasyPostClient } from './common/easypost'
+import { EmailClient } from './common/email'
 import { Order, Fulfillment } from './gql'
 import rules, { NoSuitableRatesError } from './rules'
 import { createPackingSlipPdfs } from './packing-slip/packing-slip-generator'
 import constants from './constants'
 import { DateTime } from 'luxon'
 import shopifyCarriers from './carrier-mapping.json'
-import logger from '../utils/logger.js'
-import { redactPII } from "../utils/redactPII.js";
-import retry from "../utils/retry.js";
-import { extractNumberFromShopifyGuid } from "../utils/utils.js";
-import { validateShopifyWebhookHmac } from "../utils/webhook-validation.js";
+import logger from './utils/logger.js'
+import { redactPII } from "./utils/redactPII.js";
+import retry from "./utils/retry.js";
+import { extractNumberFromShopifyGuid } from "./utils/utils.js";
+import { validateShopifyWebhookHmac } from "./utils/webhook-validation.js";
 
 const env = Bun.env.NODE_ENV
 

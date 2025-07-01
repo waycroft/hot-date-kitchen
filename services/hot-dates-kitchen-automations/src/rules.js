@@ -1,5 +1,5 @@
 import jsonata from 'jsonata'
-import logger from '../utils/logger.js'
+import logger from './utils/logger'
 
 export class NoSuitableRatesError extends Error {
 	constructor(message, options) {
