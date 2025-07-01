@@ -17,6 +17,7 @@
     "jsonata": "^2.0.6",
     "luxon": "^3.6.1",
     "nodemailer": "^7.0.4",
-    "puppeteer": "^24.11.1"
+    "puppeteer": "^24.11.1",
+    "typescript": "^5.8.3"
   }
 }
