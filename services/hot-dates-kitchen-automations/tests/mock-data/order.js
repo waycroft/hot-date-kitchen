@@ -24,8 +24,8 @@ const mockOrder = {
       zip: "11201",
       phone: "+1234567890",
       company: "Doe Industries",
-      name: "Jane Doe"
-    }
+      name: "Jane Doe",
+    },
   },
   billingAddress: {
     firstName: "Jane",
@@ -40,7 +40,7 @@ const mockOrder = {
     zip: "11201",
     phone: "+1234567890",
     name: "Jane Doe",
-    company: "Doe Industries"
+    company: "Doe Industries",
   },
   shippingAddress: {
     firstName: "Jane",
@@ -55,7 +55,7 @@ const mockOrder = {
     zip: "11201",
     phone: "+1234567890",
     name: "Jane Doe",
-    company: "Doe Industries"
+    company: "Doe Industries",
   },
   lineItems: [
     {
@@ -67,21 +67,21 @@ const mockOrder = {
       properties: [
         {
           name: "Engraving",
-          value: "Happy Birthday John"
-        }
-      ]
-    }
+          value: "Happy Birthday John",
+        },
+      ],
+    },
   ],
   note: "Leave package at side door",
   noteAttributes: [
     {
       name: "Gift",
-      value: "Yes"
+      value: "Yes",
     },
     {
       name: "Gift Note",
-      value: "Happy Anniversary!"
-    }
+      value: "Happy Anniversary!",
+    },
   ],
   tags: "VIP, Repeat Buyer",
   paymentGatewayNames: ["shopify_payments"],
@@ -91,9 +91,9 @@ const mockOrder = {
     creditCardNumber: "•••• •••• •••• 4242",
     expirationMonth: "12",
     expirationYear: "2027",
-    name: "Jane Doe"
+    name: "Jane Doe",
   },
-  sourceName: "web"
+  sourceName: "web",
 };
 
 export default mockOrder;

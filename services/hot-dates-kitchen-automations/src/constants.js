@@ -1,5 +1,5 @@
 export default {
-	"fulfillment_centers": {
-		"HAUSER": "Hauser"
-	}
-}
+  fulfillment_centers: {
+    HAUSER: "Hauser",
+  },
+};

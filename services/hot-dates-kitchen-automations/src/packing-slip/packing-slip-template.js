@@ -46,6 +46,4 @@ const htmlTemplate = `
 </html>
 `;
 
-export {
-  htmlTemplate
-};
+export { htmlTemplate };

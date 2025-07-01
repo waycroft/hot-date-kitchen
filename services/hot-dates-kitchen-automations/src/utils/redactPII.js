@@ -1,44 +1,42 @@
 const REDACT_KEYS = [
-  'shippingAddress',
-  'billingAddress',
-  'note',
-  'noteAttributes',
-  'creditCardBin',
-  'creditCardNumber',
-  'name',
-  'expirationMonth',
-  'expirationYear',
-  'email',
-  'firstName',
-  'lastName',
-  'email',
-  'address1',
-  'street1',
-  'address2',
-  'zip',
-  'phone'
+  "shippingAddress",
+  "billingAddress",
+  "note",
+  "noteAttributes",
+  "creditCardBin",
+  "creditCardNumber",
+  "name",
+  "expirationMonth",
+  "expirationYear",
+  "email",
+  "firstName",
+  "lastName",
+  "email",
+  "address1",
+  "street1",
+  "address2",
+  "zip",
+  "phone",
 ];
 
-const redactKeySet = new Set(REDACT_KEYS.map(k => k.toLowerCase()));
+const redactKeySet = new Set(REDACT_KEYS.map((k) => k.toLowerCase()));
 
 const redactPII = (obj) => {
   if (Array.isArray(obj)) {
     return obj.map(redactPII);
-  } else if (obj && typeof obj === 'object') {
+  } else if (obj && typeof obj === "object") {
     const out = {};
     for (let [k, v] of Object.entries(obj)) {
       const key = k.toLowerCase();
       if (redactKeySet.has(key)) {
-        out[k] = '[REDACTED]';
+        out[k] = "[REDACTED]";
       }
       // redacts all shopify custom properties
-      else if (k === 'custom_attributes' && Array.isArray(v)) {
-        out[k] = v.map(a => (
-          {
-            ...a,
-            value: '[REDACTED]'
-          }
-        ));
+      else if (k === "custom_attributes" && Array.isArray(v)) {
+        out[k] = v.map((a) => ({
+          ...a,
+          value: "[REDACTED]",
+        }));
       } else {
         out[k] = redactPII(v);
       }
@@ -51,15 +49,15 @@ const redactPII = (obj) => {
 const containsPII = (obj) => {
   if (Array.isArray(obj)) {
     return obj.some(containsPII);
-  } else if (obj && typeof obj === 'object') {
+  } else if (obj && typeof obj === "object") {
     for (const [key, val] of Object.entries(obj)) {
       if (
         (redactKeySet.has(key.toLowerCase()) ||
-        // shopify custom properties
-        (key === 'custom_attributes' && Array.isArray(val))) &&
+          // shopify custom properties
+          (key === "custom_attributes" && Array.isArray(val))) &&
         val != null &&
-        val !== '' &&
-        val !== '[REDACTED]'
+        val !== "" &&
+        val !== "[REDACTED]"
       ) {
         return true;
       }
@@ -71,7 +69,4 @@ const containsPII = (obj) => {
   return false;
 };
 
-export {
-  redactPII,
-  containsPII,
-}
+export { redactPII, containsPII };
