@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/bun";
-import { ShopifyClient } from 'shopify'
-import { EasyPostClient } from 'easypost'
-import { EmailClient } from 'email'
+import { ShopifyClient } from '../common/shopify'
+import { EasyPostClient } from '../common/easypost'
+import { EmailClient } from '../common/email'
 import { Order, Fulfillment } from './gql'
 import rules, { NoSuitableRatesError } from './rules'
 import { createPackingSlipPdfs } from './packing-slip/packing-slip-generator'
