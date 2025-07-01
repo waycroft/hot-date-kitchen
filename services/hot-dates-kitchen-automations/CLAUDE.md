@@ -43,6 +43,14 @@ This is a Shopify webhook automation service that purchases shipping labels thro
 ### Data Flow
 - Webhook payload → Order fetch → Fulfillment orders → EasyPost shipments → Rate selection → Label purchase → Shopify fulfillment creation → Packing slip generation → Email notification
 
+## Deployment
+
+- **Deploy**: `./deploy.sh` - Zero-downtime deployment to EC2
+- Zero-downtime deployment using symlink swapping and systemd service reload
+- Creates timestamped releases in `/opt/${APP_NAME}/releases/`
+- Automatically rolls back on deployment failure
+- Requires environment variables: `EC2_HOST`, `EC2_USER`, `APP_NAME`, `EC2_SSH_KEY`, `SERVICE_USER`
+
 ## Testing Guidelines
 
 - When writing tests, try to avoid using a `describe` block and just use `test`s, unless there will be more than one `describe`
