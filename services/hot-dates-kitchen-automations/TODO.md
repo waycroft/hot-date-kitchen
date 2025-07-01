@@ -2,11 +2,6 @@
 
 - [ ] Buy response: "phoneNumber: none is not an allowed value" returned from Easypost, supposedly because phone was not provided by customer at Shopify checkout?
 
-## Deployment
-
-- [x] Pre-flight: [Shopify webhooks best practices](https://shopify.dev/docs/apps/build/webhooks/best-practices)
-- [x] Deploy to EC2
-
 ## App
 
 - [ ] Order cancellations: is automation required for cancelling fulfillment?
