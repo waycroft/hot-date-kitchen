@@ -14,3 +14,4 @@
 
 - [ ] Logic for orders with multiple fulfillment locations
 - [ ] Scope github actions to each service (right now they're all shared)
+- [ ] If more services are added, reconsider monorepo using `services/`
