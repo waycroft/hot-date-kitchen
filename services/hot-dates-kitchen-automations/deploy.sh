@@ -40,8 +40,7 @@ check_env_vars() {
         echo "  EC2_USER - SSH username"
         echo "  APP_NAME - Application/service name"
         echo "  EC2_SSH_KEY - SSH private key content"
-        echo "Optional variables:"
-        echo "  SERVICE_USER - User that owns the service files (defaults to APP_NAME if not set)"
+        echo "  SERVICE_USER - User that owns the service files"
         exit 1
     fi
 }
