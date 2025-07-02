@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] Buy response: "phoneNumber: none is not an allowed value" returned from Easypost, supposedly because phone was not provided by customer at Shopify checkout?
+- [ ] Log rotation
 
 ## App
 
