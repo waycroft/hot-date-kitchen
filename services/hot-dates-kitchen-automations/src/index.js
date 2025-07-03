@@ -118,10 +118,10 @@ async function purchaseShippingLabelsHandler(reqBody) {
 
     // The "rates" list returned by "create shipment" can sometimes return different results between calls, and some results might pass rules, while others don't. So we implement a gentle retry to see if we get a better roll of the die.
     // TODO: Are there repercussions for creating multiple shipments? I'm assuming the only real repercussion is *purchasing* a shipment...but worth looking into.
-    let chosenRateId;
+    let chosenRate;
     let shipmentResponse;
     try {
-      chosenRateId = await retry(
+      chosenRate = await retry(
         async function () {
           // Create shipment
           shipmentResponse = await easypost.createShipment(shipment);
@@ -197,7 +197,7 @@ Error: ${e.message}`,
     // Buy the rate
     const buyResponse = await easypost.buyShipment(
       shipmentResponse.id,
-      chosenRateId,
+      chosenRate.id,
     );
     logger.info(`Purchased shipping label for order ${order.name}`);
     logger.debug(
@@ -282,7 +282,15 @@ Error: ${e.message}`,
           : Bun.env.TEST_TO_EMAIL,
       subject: "Hot Dates Kitchen: Fulfillment order",
       body: {
-        text: `Shipping label link: ${buyResponse.postage_label.label_url}\n\nPacking slip attached.`,
+        text: `Shipping label link: ${buyResponse.postage_label.label_url}
+
+Shipping details:
+- Carrier: ${chosenRate.carrier}
+- Service: ${chosenRate.service}
+- Cost: $${chosenRate.rate}
+- Delivery days: ${chosenRate.delivery_days}
+
+Packing slip attached.`,
       },
       attachments: [
         {

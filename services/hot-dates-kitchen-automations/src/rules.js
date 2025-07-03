@@ -48,9 +48,9 @@ export default async function (easypostShipment) {
     logger.debug(
       "Cheapest non-USPS rate:\n" + JSON.stringify(nonUSPSRates?.[0], null, 2),
     );
-    chosenRate = nonUSPSRates?.[0]?.id;
+    chosenRate = nonUSPSRates?.[0];
   } else {
-    chosenRate = ratesFor2DaysOrLess?.[0]?.id;
+    chosenRate = ratesFor2DaysOrLess?.[0];
   }
 
   logger.debug(
