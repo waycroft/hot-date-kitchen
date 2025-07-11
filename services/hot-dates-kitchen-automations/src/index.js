@@ -274,6 +274,12 @@ Error: ${e.message}`,
     //await Bun.write('/Users/waycroft/Downloads/packingSlip.pdf', packingSlipPdf)
 
     // Email packing slip and shipping label
+    const allRatesText = shipmentResponse.rates
+      .map((rate) => 
+        `- ${rate.carrier} ${rate.service}: $${rate.rate} (${rate.delivery_days} days, ${rate.est_delivery_days} delivery days, guaranteed: ${rate.delivery_date_guaranteed}, mode: ${rate.mode}, weight: ${shipment.parcel.weight}oz, ID: ${rate.id})`
+      )
+      .join('\n');
+
     const message = {
       from: Bun.env.FULFILLMENTS_FROM_EMAIL,
       to:
@@ -284,11 +290,14 @@ Error: ${e.message}`,
       body: {
         text: `Shipping label link: ${buyResponse.postage_label.label_url}
 
-Shipping details:
+Chosen shipping rate:
 - Carrier: ${chosenRate.carrier}
 - Service: ${chosenRate.service}
 - Cost: $${chosenRate.rate}
 - Delivery days: ${chosenRate.delivery_days}
+
+All available rates:
+${allRatesText}
 
 Packing slip attached.`,
       },
